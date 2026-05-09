@@ -48,17 +48,22 @@ class LoginSerializers(serializers.ModelSerializer):
             if not user.check_password(password):
                 raise serializers.ValidationError("La contraseña no coincide")
 
+        # Defensivo: rol y personalInfo pueden ser None (FK con null=True),
+        # sobre todo en superusers creados con createsuperuser.
+        rol_nombre = user.rol.nombre if user.rol else "sin rol"
+        telefono = user.personalInfo.telefono if user.personalInfo else ""
+
         refresh = RefreshToken.for_user(user)
         refresh["nombre"] = user.nombre
-        refresh["rol"] = user.rol.nombre
+        refresh["rol"] = rol_nombre
         return {
             "success": True,
             "data": {
                 "nombre": user.nombre,
                 "email": user.email,
-                "teléfono": user.personalInfo.telefono,
-                "rol": user.rol.nombre,
-                "refreshToken":str(refresh),
+                "teléfono": telefono,
+                "rol": rol_nombre,
+                "refreshToken": str(refresh),
                 "token": str(refresh.access_token)
             }
         }
