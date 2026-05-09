@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  url: "https://google.com",
-}
+  apiUrl: 'http://127.0.0.1:8000/api',
+};

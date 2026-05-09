@@ -1,0 +1,23 @@
+# Blueprint Render: https://render.com/docs/blueprint-spec
+# Tras el primer deploy, en el panel añade DATABASE_URL (Supabase) y CSRF_TRUSTED_ORIGINS (URL del front).
+services:
+  - type: web
+    name: lparada-api
+    runtime: python
+    rootDir: LPBackend
+    plan: free
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
+    startCommand: gunicorn LaParada.wsgi:application --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.13.0"
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: ALLOWED_HOST
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false

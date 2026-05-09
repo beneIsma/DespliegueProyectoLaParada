@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 
+import dj_database_url
 from decouple import config
 from django.conf.global_settings import AUTHENTICATION_BACKENDS, AUTH_USER_MODEL
 
@@ -34,10 +35,14 @@ if SECRET_KEY == "":
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
 else:
-    ALLOWED_HOSTS = config("ALLOWED_HOST", default=[])
+    _hosts = config("ALLOWED_HOST", default="")
+    ALLOWED_HOSTS = [h.strip() for h in _hosts.split(",") if h.strip()]
 
-    if len(ALLOWED_HOSTS) != 0:
-        ALLOWED_HOSTS = ALLOWED_HOSTS.split(",")
+CSRF_TRUSTED_ORIGINS = [
+    o.strip()
+    for o in config("CSRF_TRUSTED_ORIGINS", default="").split(",")
+    if o.strip()
+]
 
 
 EXTENSIONES_BLACKLIST = [".ru", ".xyz"]
@@ -72,6 +77,7 @@ SIMPLE_JWT = {
 #Medidas de seguridad
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -105,12 +111,25 @@ WSGI_APPLICATION = 'LaParada.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Supabase / Postgres: pon DATABASE_URL en .env (Project Settings → Database → URI).
+# Para migraciones, usa el host "direct" o puerto 5432 según la documentación de Supabase.
+_database_url = config("DATABASE_URL", default="").strip()
+if _database_url:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            _database_url,
+            conn_max_age=600,
+            conn_health_checks=True,
+            ssl_require=True,
+        )
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
@@ -152,8 +171,14 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [ASSETS_DIR / 'static']
 STATIC_ROOT = ASSETS_DIR / 'collected_static'
 
+if not DEBUG:
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = ASSETS_DIR / 'media'
+
+# Si True y DEBUG=False, Django sirve /media/ (solo para demos; usa Storage en serio).
+SERVE_MEDIA_IN_PRODUCTION = config("SERVE_MEDIA_IN_PRODUCTION", default=False, cast=bool)
 
 #Intentar autentificacion
 ##AUTHENTICATION_BACKENDS = [

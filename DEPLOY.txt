@@ -1,0 +1,33 @@
+=== 1) Datos de SQLite a Supabase ===
+- Coloca tu archivo db.sqlite3 en la carpeta LPBackend (si aun lo tienes).
+- En PowerShell:
+    cd LPBackend
+    .\scripts\export_sqlite_dump.ps1
+    .\scripts\import_dump_to_postgres.ps1
+  (El export quita temporalmente DATABASE_URL del .env para leer SQLite.)
+
+=== 2) Subir codigo a GitHub ===
+- Crea un repositorio vacio en GitHub.
+- En la carpeta ProyectoPersonal_TFG: git init (si no existe), git add, git commit, git remote add origin ..., git push.
+- No subas .env ni db.sqlite3 (estan en .gitignore).
+
+=== 3) Backend en Render (API publica) ===
+- En Render: New + Blueprint, conecta el repo; detectara render.yaml.
+- O New Web Service: root LPBackend, build y start como en render.yaml.
+- Variables de entorno en el panel (o completar las sync:false):
+    DATABASE_URL = URI Session pooler de Supabase (misma que en tu .env local).
+    ALLOWED_HOST = tu-servicio.onrender.com (sin https)
+    CSRF_TRUSTED_ORIGINS = https://tu-proyecto.vercel.app (cuando tengas el front)
+    DEBUG = False
+  SECRET_KEY puede generarse el blueprint la primera vez; si cambias algo, conserva la misma clave.
+- URL del API: anotala (ej. https://lparada-api.onrender.com).
+
+=== 4) Front en Vercel ===
+- New Project: repo GitHub, ROOT DIRECTORY = LPAngular.
+- Environment variable: NG_API_URL = https://TU-API.onrender.com/api (con /api al final).
+- Deploy (usa vercel.json: build inyecta NG_API_URL en environment.ts).
+- Dominio Vercel: Settings -> Domains (opcional: compra un dominio y enlaza aqui).
+
+=== 5) Enlazar dominio propio (opcional) ===
+- En tu proveedor DNS: CNAME del www al dominio que te de Vercel; subdominio api al de Render si quieres API propia.
+- Actualiza ALLOWED_HOST, CSRF_TRUSTED_ORIGINS en Render y NG_API_URL en Vercel con las URLs finales.

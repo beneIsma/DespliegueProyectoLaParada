@@ -1,0 +1,14 @@
+# Secretos y datos locales
+LPBackend/.env
+LPBackend/.env.*
+!LPBackend/.env.example
+LPBackend/db.sqlite3
+LPBackend/datos_export.json
+
+# Python / Node
+__pycache__/
+*.py[cod]
+LPAngular/node_modules/
+LPAngular/dist/
+LPBackend/assets/collected_static/
+LPBackend/assets/media/
