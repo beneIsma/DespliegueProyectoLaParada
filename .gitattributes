@@ -1,0 +1,22 @@
+# Normaliza saltos de línea: en el repo siempre LF, en Windows el checkout usa CRLF.
+* text=auto
+
+# Scripts que SIEMPRE deben tener el final de línea correcto
+*.sh text eol=lf
+*.ps1 text eol=crlf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Binarios (no tocar)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.pdf binary
+*.zip binary
+*.sqlite3 binary
