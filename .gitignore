@@ -11,4 +11,4 @@ __pycache__/
 LPAngular/node_modules/
 LPAngular/dist/
 LPBackend/assets/collected_static/
-LPBackend/assets/media/
+# Sube assets/media/ (imagenes de productos/secciones) para que existan en Render.

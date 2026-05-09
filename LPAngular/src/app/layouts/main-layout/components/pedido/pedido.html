@@ -40,7 +40,7 @@
               <div class="col-4">
                 <div class="d-flex flex-column">
                   <p class="mt-2 ms-1 fs-4">Fecha de entrega estimada: {{p.entregaEstimada}}</p>
-                  <img src="/icons/carrito.png" alt="imgCart" class="imgProducto">
+                  <div class="imgProducto d-flex align-items-center justify-content-center bg-light border rounded"><i class="bi bi-cart3 fs-1 text-secondary" aria-hidden="true"></i></div>
                 </div>
               </div>
               @if (pedidoAbierto() === p.slug) {
@@ -63,7 +63,7 @@
                 </div>
               } @else {
                 <div class="col-8">
-                  <img src="/background/fondoPedido.png" alt="imagenFondoPedido" class="imgFondoPedido">
+                  <div class="imgFondoPedido imgFondoPedido--hero" aria-hidden="true"></div>
                 </div>
               }
             </div>

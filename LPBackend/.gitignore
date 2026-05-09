@@ -2,5 +2,4 @@
 *.pyc
 __pycache__/
 db.sqlite3
-assets/media/
 assets/collected_static/

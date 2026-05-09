@@ -52,6 +52,12 @@
   object-fit: cover;
   display: block;
 }
+.imgHome--hero {
+  min-height: 69.5vh;
+  background: linear-gradient(135deg, #1a0030 0%, #5c067f 40%, #a14fc1 70%, #2e004f 100%);
+  background-size: cover;
+  background-position: center;
+}
 .contenedorImg {
   position: relative;
   width: 100%;

@@ -1,6 +1,7 @@
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from Productos.media_urls import producto_imagen_url
 from Productos.models import ProductoModel
 from rest_framework import status
 
@@ -21,9 +22,8 @@ class ProductosView(APIView):
             "proveedor": p.proveedor.nombreProveedor,
             "marca": p.marca,
             "descripcion": p.descripcion,
-            "imagen": "" if not p.image.imagen.url else request.build_absolute_uri(p.image.imagen.url)
+            "imagen": producto_imagen_url(request, p),
         }for p in productos]
 
-        print(data)
         return Response({"data":data, "success": True}, status=status.HTTP_200_OK)
 

@@ -61,7 +61,7 @@ export class MainLayout {
     if (!this.existeToken()) {
       event.preventDefault();
       // this.alertasServises.alert("ERROR","Ántes debes loguearte","info")
-      this.alertasServises.mensajeFaltaLogin("Oops...","Para acceder debes loguearte", "/icons/iconErr.png")
+      this.alertasServises.mensajeFaltaLogin("Oops...","Para acceder debes loguearte", "/icons/iconErr.svg")
     }
   }
 

@@ -177,8 +177,19 @@ if not DEBUG:
 MEDIA_URL = '/media/'
 MEDIA_ROOT = ASSETS_DIR / 'media'
 
-# Si True y DEBUG=False, Django sirve /media/ (solo para demos; usa Storage en serio).
-SERVE_MEDIA_IN_PRODUCTION = config("SERVE_MEDIA_IN_PRODUCTION", default=False, cast=bool)
+# En producción (DEBUG=False) sirve /media/ salvo que fuerces SERVE_MEDIA_IN_PRODUCTION=false.
+# En Render/Vercel las URLs https correctas requieren cabeceras del proxy:
+_serve_media = config("SERVE_MEDIA_IN_PRODUCTION", default="auto").strip().lower()
+if _serve_media in ("1", "true", "yes", "on"):
+    SERVE_MEDIA_IN_PRODUCTION = True
+elif _serve_media in ("0", "false", "no", "off"):
+    SERVE_MEDIA_IN_PRODUCTION = False
+else:
+    SERVE_MEDIA_IN_PRODUCTION = not DEBUG
+
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    USE_X_FORWARDED_HOST = True
 
 #Intentar autentificacion
 ##AUTHENTICATION_BACKENDS = [
