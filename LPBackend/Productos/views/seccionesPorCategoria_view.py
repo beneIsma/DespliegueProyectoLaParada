@@ -15,7 +15,7 @@ class SeccionesPorCategoriaView(APIView):
         data = [{
                 "categoria": s.categoria.nombre,
                 "nombre": s.nombre,
-                "imagen": absolute_media_url(request, s.imagen) if s.imagen else "",
+                "imagen": absolute_media_url(request, s.imagen),
             }for s in secciones]
 
         return Response({"data":data, "success":True}, status=status.HTTP_200_OK)

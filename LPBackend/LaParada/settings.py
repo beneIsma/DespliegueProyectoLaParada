@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/6.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
+import os
 from datetime import timedelta
 from pathlib import Path
 
@@ -190,6 +191,11 @@ else:
 if not DEBUG:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     USE_X_FORWARDED_HOST = True
+
+# URL pública del API (https://tu-servicio.onrender.com). Render define RENDER_EXTERNAL_URL automáticamente.
+PUBLIC_BASE_URL = config("PUBLIC_BASE_URL", default="").strip().rstrip("/")
+if not PUBLIC_BASE_URL:
+    PUBLIC_BASE_URL = os.environ.get("RENDER_EXTERNAL_URL", "").strip().rstrip("/")
 
 #Intentar autentificacion
 ##AUTHENTICATION_BACKENDS = [
